@@ -40,7 +40,6 @@ class MakeDense(nn.Module):
         return out
 
 
-# --- Downsampling block in GridDehazeNet  --- #
 class DownSample(nn.Module):
     def __init__(self, in_channels, kernel_size=3, stride=2):
         super(DownSample, self).__init__()
@@ -53,7 +52,6 @@ class DownSample(nn.Module):
         return out
 
 
-# --- Upsampling block in GridDehazeNet  --- #
 class UpSample(nn.Module):
     def __init__(self, in_channels, kernel_size=3, stride=2):
         super(UpSample, self).__init__()
@@ -138,7 +136,7 @@ class HF_Net(nn.Module):
         self.rdb_in = ERDB(depth_rate, num_dense_layer, growth_rate)
         # self.rdb_out = RDB(freq_inchannels + in_channels, num_dense_layer, growth_rate)
 
-        # ----提炼分支----#
+        # ----refine_block----#
         self.refine_block = UNet(3, 3)
         # self.refine_block = RefineBlock()
 
@@ -150,7 +148,7 @@ class HF_Net(nn.Module):
                 self.rdb_module.update({'{}_{}'.format(i, j): ERDB(rdb_in_channels, num_dense_layer, growth_rate)})
             rdb_in_channels *= stride
 
-        # 频率分支
+        # frequency branch
         self.freq_conv_in = nn.Conv2d(freq_inchannels, depth_rate, kernel_size=kernel_size,
                                       padding=(kernel_size - 1) // 2)
         self.freq_conv_out = nn.Conv2d(depth_rate, freq_inchannels, kernel_size=kernel_size,
@@ -216,7 +214,7 @@ class HF_Net(nn.Module):
                                 self.coefficient[i, j, 1, :channel_num][None, :, None, None] * self.upsample_module[
                                     '{}_{}'.format(i, j)](x_index[i + 1][j], x_index[i][j - 1].size())
 
-        # 计算freq 分支
+        # freq branch
         freq_in = self.freq_conv_in(x_freq)
         freq_x_index[0][0] = freq_in
         freq_channels_num = self.depth_rate

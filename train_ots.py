@@ -154,11 +154,7 @@ for epoch in range(0,num_epochs):
     print("one_epoch_time:", one_epoch_time)
     # print_log(epoch+1, num_epochs, one_epoch_time, train_psnr, val_psnr, val_ssim, category)
     
-    # --- update the network weight --- #
-    # if val_psnr >= old_val_psnr:
-    #     torch.save(net.state_dict(), '{}_haze_best_{}_{}'.format(category, network_height, network_width))
-    #     old_val_psnr = val_psnr
-    
+
 
 
 

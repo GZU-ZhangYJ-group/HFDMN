@@ -127,27 +127,29 @@ def laplace_sharpen(input_image, c=-1):
 
     '''
 
-    input_image_cp = np.copy(input_image)
+    input_image_cp = np.copy(input_image)  # 输入图像的副本
+
+    # 拉普拉斯滤波器
     laplace_filter = np.array([
         [1, 1, 1],
         [1, -8, 1],
         [1, 1, 1],
     ])
 
-    input_image_cp = np.pad(input_image_cp, (1, 1), mode='constant', constant_values=0)  #
+    input_image_cp = np.pad(input_image_cp, (1, 1), mode='constant', constant_values=0)  # 填充输入图像
 
     print(input_image_cp.shape)
-    (m, n, tt) = input_image_cp.shape
+    (m, n, tt) = input_image_cp.shape  # 填充后的输入图像的尺寸
 
-    output_image = np.copy(input_image_cp)
+    output_image = np.copy(input_image_cp)  # 输出图像
 
     for i in range(1, m - 1):
         for j in range(1, n - 1):
-            R = np.sum(laplace_filter * input_image_cp[i - 1:i + 2, j - 1:j + 2])  #
+            R = np.sum(laplace_filter * input_image_cp[i - 1:i + 2, j - 1:j + 2])  # 拉普拉斯滤波器响应
 
             output_image[i, j] = input_image_cp[i, j] + c * R
 
-    output_image = output_image[1:m - 1, 1:n - 1]  #
+    output_image = output_image[1:m - 1, 1:n - 1]  # 裁剪
 
     return output_image
 
@@ -233,6 +235,8 @@ def frequency_img_torch(img):
         hf_img = torch.from_numpy(cv_Laplacian(temp).transpose((2, 0, 1)))
         hf_imgs[i] = hf_img
 
+    # hf_img = laplace_sharpen(img)
+    # hf_img = cv_Laplacian(img)
     freq_imgs = torch.cat((lf_imgs, hf_imgs), dim=1)
 
     return freq_imgs
