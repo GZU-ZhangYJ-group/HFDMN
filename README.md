@@ -1,4 +1,4 @@
-<h1 align="center"> Multi-scale dehazing network via high-frequency feature fusion </h1>
+<h1 align="center"> Multi-scale dehazing network via<br>high-frequency feature fusion </h1>
 
 
 <div align="center">
